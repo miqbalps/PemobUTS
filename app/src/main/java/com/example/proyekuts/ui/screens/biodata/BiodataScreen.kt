@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -73,9 +74,20 @@ fun BiodataScreen(modifier: Modifier = Modifier) {
         primary = darkBlueBase
     )
 
+    val customTextFieldColors = TextFieldDefaults.colors(
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        focusedIndicatorColor = darkBlueBase,
+        unfocusedIndicatorColor = Color.Gray,
+        cursorColor = Color.Black
+    )
+
     // --- UI Layout ---
     Column(
         modifier = modifier.fillMaxSize()
+            .background(Color(0xFFF4F6F8))
     ) {
         // --- Bagian Header (Gradasi Dark Blue) ---
         Column(
@@ -150,21 +162,23 @@ fun BiodataScreen(modifier: Modifier = Modifier) {
                 Text(
                     "Informasi Pribadi",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.Black
                 )
                 Spacer(Modifier.height(4.dp))
 
-                OutlinedTextField(value = state.namaLengkap, onValueChange = stateHolder::onNamaLengkapChange, label = { Text("Nama Lengkap") }, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = state.telepon, onValueChange = stateHolder::onTeleponChange, label = { Text("Nomor Telepon") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = state.email, onValueChange = stateHolder::onEmailChange, label = { Text("Email") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = state.alamat, onValueChange = stateHolder::onAlamatChange, label = { Text("Alamat") }, modifier = Modifier.fillMaxWidth(), minLines = 3)
-                OutlinedTextField(value = state.linkedin, onValueChange = stateHolder::onLinkedInChange, label = { Text("Profil LinkedIn") }, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = state.github, onValueChange = stateHolder::onGithubChange, label = { Text("Profil GitHub") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = state.namaLengkap, colors = customTextFieldColors, onValueChange = stateHolder::onNamaLengkapChange, label = { Text("Nama Lengkap", color = Color.Black) }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = state.telepon, colors = customTextFieldColors, onValueChange = stateHolder::onTeleponChange, label = { Text("Nomor Telepon", color = Color.Black) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = state.email, colors = customTextFieldColors, onValueChange = stateHolder::onEmailChange, label = { Text("Email", color = Color.Black) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = state.alamat, colors = customTextFieldColors, onValueChange = stateHolder::onAlamatChange, label = { Text("Alamat", color = Color.Black) }, modifier = Modifier.fillMaxWidth(), minLines = 3)
+                OutlinedTextField(value = state.linkedin, colors = customTextFieldColors, onValueChange = stateHolder::onLinkedInChange, label = { Text("Profil LinkedIn", color = Color.Black) }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = state.github, colors = customTextFieldColors, onValueChange = stateHolder::onGithubChange, label = { Text("Profil GitHub", color = Color.Black) }, modifier = Modifier.fillMaxWidth())
 
                 OutlinedTextField(
                     value = state.tanggalLahir,
+                    colors = customTextFieldColors,
                     onValueChange = {},
-                    label = { Text("Tanggal Lahir") },
+                    label = { Text("Tanggal Lahir", color = Color.Black) },
                     readOnly = true,
                     trailingIcon = {
                         Icon(Icons.Default.CalendarToday, "Pilih Tanggal", Modifier.clickable { datePickerDialog.show() })
@@ -172,33 +186,34 @@ fun BiodataScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                ExposedDropdownMenuBox(
-                    expanded = state.jenisKelaminDropdownExpanded,
-                    onExpandedChange = { stateHolder.onJenisKelaminDropdownToggle() },
-                    modifier = Modifier.fillMaxWidth()
+                Text(
+                    text = "Jenis Kelamin",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.Black
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    OutlinedTextField(
-                        value = state.jenisKelamin,
-                        onValueChange = {},
-                        label = { Text("Jenis Kelamin") },
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = state.jenisKelaminDropdownExpanded) },
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = state.jenisKelaminDropdownExpanded,
-                        onDismissRequest = stateHolder::onJenisKelaminDropdownDismiss
-                    ) {
-                        stateHolder.jenisKelaminOptions.forEach { option ->
-                            DropdownMenuItem(
-                                text = { Text(option) },
-                                onClick = { stateHolder.onJenisKelaminSelect(option) }
+                    listOf("Laki-laki", "Perempuan").forEach { gender ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable { stateHolder.onJenisKelaminSelect(gender) }
+                        ) {
+                            RadioButton(
+                                selected = state.jenisKelamin == gender,
+                                onClick = { stateHolder.onJenisKelaminSelect(gender) },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = darkBlueBase,
+                                    unselectedColor = Color.Gray
+                                )
                             )
+                            Text(text = gender, color = Color.Black)
                         }
                     }
                 }
+
 
                 ExposedDropdownMenuBox(
                     expanded = state.pekerjaanDropdownExpanded,
@@ -207,8 +222,9 @@ fun BiodataScreen(modifier: Modifier = Modifier) {
                 ) {
                     OutlinedTextField(
                         value = state.pekerjaan,
+                        colors = customTextFieldColors,
                         onValueChange = {},
-                        label = { Text("Pekerjaan") },
+                        label = { Text("Pekerjaan", color = Color.Black) },
                         readOnly = true,
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = state.pekerjaanDropdownExpanded) },
                         modifier = Modifier
@@ -221,7 +237,7 @@ fun BiodataScreen(modifier: Modifier = Modifier) {
                     ) {
                         stateHolder.pekerjaanOptions.forEach { option ->
                             DropdownMenuItem(
-                                text = { Text(option) },
+                                text = { Text(option, color = Color.Black) },
                                 onClick = { stateHolder.onPekerjaanSelect(option) }
                             )
                         }
@@ -239,7 +255,8 @@ fun BiodataScreen(modifier: Modifier = Modifier) {
                     Text(
                         text = "Simpan",
                         modifier = Modifier.padding(vertical = 8.dp),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
                     )
                 }
                 Spacer(Modifier.height(4.dp))
