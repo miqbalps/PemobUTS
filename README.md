@@ -50,38 +50,24 @@ Aplikasi ini disusun sesuai ketentuan UTS:
 - Berita
   - Daftar kartu berita statis berulang (gambar kecil, judul, ringkasan, waktu).
 
-## Teknologi
-
-- Kotlin + Jetpack Compose (Material 3).
-- Fragment + Navigation (tiap menu sebagai Fragment yang memuat Compose).
-- Gradle (Kotlin DSL).
-
 ## Screenshots
 
-Screenshot lengkap ada di folder public/screenshots
+Letakkan file gambar di folder `public/screenshots/`. Tabel di bawah membatasi lebar gambar agar tidak terlalu besar (maks 320 px).
 
-- Splash Screen  
-  ![Splash](public/screenshots/splash_screen.jpg)
-
-- Biodata  
-  ![Biodata](public/screenshots/view_mode.jpg)
-
-- Kontak  
-  ![Kontak](public/screenshots/contact_list.jpg)
-
-- Kalkulator  
-  ![Kalkulator](public/screenshots/calculator.jpg)
-
-- Cuaca  
-  ![Cuaca](public/screenshots/weather.jpg)
-
-- Berita  
-  ![Berita](public/screenshots/news_list.jpg)
+| Halaman    | Deskripsi singkat                                                            | Screenshot                                                                 |
+| ---------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Splash     | Judul aplikasi, foto, NIM, nama; tampil 5 detik sebelum ke Dashboard.        | <img src="public/screenshots/splash_screen.jpg" alt="Splash" width="320">  |
+| Dashboard  | Navigasi bawah ke Biodata, Kontak, Kalkulator, Cuaca, Berita.                | <img src="public/screenshots/dashboard.jpg" alt="Dashboard" width="320">   |
+| Biodata    | Profil + input dropdown, radio, text field, date picker (tanpa penyimpanan). | <img src="public/screenshots/view_mode.jpg" alt="Biodata" width="320">     |
+| Kontak     | Daftar minimal 15 kontak statis dengan avatar lingkaran.                     | <img src="public/screenshots/contact_list.jpg" alt="Kontak" width="320">   |
+| Kalkulator | Operasi +, −, ×, ÷, x², √x dan tombol clear.                                 | <img src="public/screenshots/calculator.jpg" alt="Kalkulator" width="320"> |
+| Cuaca      | Data statis suhu, kelembapan, angin; ilustrasi/animasi kondisi cuaca.        | <img src="public/screenshots/weather.jpg" alt="Cuaca" width="320">         |
+| Berita     | List/card berita statis berulang: gambar kecil, judul, ringkasan, waktu.     | <img src="public/screenshots/news_list.jpg" alt="Berita" width="320">      |
 
 Catatan:
 
-- Pastikan seluruh file gambar berada di public/screenshots/.
-- Format penamaan direkomendasikan agar urut (01-, 02-, dst).
+- Jika nama file berbeda, ganti path pada kolom Screenshot.
+- Disarankan kompresi gambar (< 500 KB) agar repo ringan.
 
 ## Struktur Proyek (ringkas)
 
@@ -103,4 +89,4 @@ Catatan:
 
 ## Lisensi
 
-Tambahkan lisensi bila diperlukan.
+Proyek ini dilisensikan di bawah MIT License. Lihat file [LICENSE](LICENSE) untuk detail.
