@@ -6,8 +6,6 @@ import androidx.compose.runtime.setValue
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-// Data class untuk menampung semua state dari form biodata
-// Diperbarui agar sesuai dengan data di gambar
 @Parcelize
 data class BiodataUiState(
     val namaLengkap: String = "Muhammad Iqbal Pasha",
@@ -20,17 +18,19 @@ data class BiodataUiState(
     val jenisKelamin: String = "",
     val pekerjaan: String = "",
     val pekerjaanDropdownExpanded: Boolean = false,
-    val jenisKelaminDropdownExpanded: Boolean = false // Ditambahkan
+    var isEditMode: Boolean = false
 ) : Parcelable
 
-// State holder class yang mengelola state dan event
 class BiodataState {
     var uiState by mutableStateOf(BiodataUiState())
 
     val pekerjaanOptions = listOf("Pelajar", "Karyawan Swasta", "Wirausaha", "Lainnya")
-    val jenisKelaminOptions = listOf("Laki-Laki", "Perempuan") // Ditambahkan
 
     // Event handlers
+    fun onEditModeToggle() {
+        uiState = uiState.copy(isEditMode = !uiState.isEditMode)
+    }
+
     fun onNamaLengkapChange(newValue: String) {
         uiState = uiState.copy(namaLengkap = newValue)
     }
@@ -59,20 +59,10 @@ class BiodataState {
         uiState = uiState.copy(tanggalLahir = newValue)
     }
 
-    // --- Jenis Kelamin (Dropdown) ---
     fun onJenisKelaminSelect(jenisKelamin: String) {
-        uiState = uiState.copy(jenisKelamin = jenisKelamin, jenisKelaminDropdownExpanded = false)
+        uiState = uiState.copy(jenisKelamin = jenisKelamin)
     }
 
-    fun onJenisKelaminDropdownDismiss() {
-        uiState = uiState.copy(jenisKelaminDropdownExpanded = false)
-    }
-
-    fun onJenisKelaminDropdownToggle() {
-        uiState = uiState.copy(jenisKelaminDropdownExpanded = !uiState.jenisKelaminDropdownExpanded)
-    }
-
-    // --- Pekerjaan (Dropdown) ---
     fun onPekerjaanSelect(pekerjaan: String) {
         uiState = uiState.copy(pekerjaan = pekerjaan, pekerjaanDropdownExpanded = false)
     }

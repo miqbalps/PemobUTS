@@ -19,14 +19,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyekuts.ui.theme.ProyekUTSTheme
 
-// Warna kustom sesuai gambar
-private val darkBlueBg = Color(0xFF013674)
-private val buttonLightGray = Color(0xFFE8EDF2)
-private val grayBG = Color(0xFFF5F7F8)
-private val buttonWhite = Color.White
-private val textDark = Color.Black
-private val textWhite = Color.White
+/**
+ * Object to hold all custom colors and constants for the Calculator UI.
+ */
+private object CalcColors {
+    val DarkBlueBg = Color(0xFF013674)
+    val ButtonLightGray = Color(0xFFE8EDF2)
+    val KeypadGrayBg = Color(0xFFF5F7F8)
+    val ButtonWhite = Color.White
+    val TextDark = Color.Black
+    val TextWhite = Color.White
+}
 
+/**
+ * Represents a single button on the calculator keypad.
+ * @param symbol The text displayed on the button.
+ * @param action The [CalculatorAction] to be performed on click.
+ * @param backgroundColor The background color of the button.
+ * @param textColor The text color of the button.
+ * @param weight The layout weight of the button in a Row.
+ * @param alignment The alignment of the text inside the button.
+ */
+private data class ButtonData(
+    val symbol: String,
+    val action: CalculatorAction,
+    val backgroundColor: Color = CalcColors.ButtonWhite,
+    val textColor: Color = CalcColors.TextDark,
+    val weight: Float = 1f,
+    val alignment: Alignment = Alignment.Center
+)
+
+/**
+ * The main entry point for the Calculator feature.
+ * This Composable orchestrates the display and button sections.
+ */
 @Composable
 fun CalculatorScreen(modifier: Modifier = Modifier) {
     val stateHolder = remember { CalculatorState() }
@@ -34,30 +60,29 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(darkBlueBg) // Latar belakang utama adalah biru
+            .background(CalcColors.DarkBlueBg)
     ) {
-        // 1. Bagian Display (Biru)
         DisplaySection(
             expression = stateHolder.expression,
             display = stateHolder.display,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f) // Mengisi sisa ruang di atas
+            modifier = Modifier.weight(1f) // Fills the remaining space at the top
         )
 
-        // 2. Bagian Tombol (Putih)
         ButtonSection(
             onAction = stateHolder::onAction,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    grayBG, // Latar belakang keypad
+                    color = CalcColors.KeypadGrayBg,
                     shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
                 )
         )
     }
 }
 
+/**
+ * Displays the calculator's expression and result.
+ */
 @Composable
 private fun DisplaySection(
     expression: String,
@@ -65,215 +90,115 @@ private fun DisplaySection(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Bottom // Teks menempel di bawah
+        verticalArrangement = Arrangement.Bottom // Aligns text to the bottom
     ) {
-        // Teks ekspresi (kecil di atas)
         Text(
             text = expression,
             style = MaterialTheme.typography.headlineMedium,
-            color = textWhite.copy(alpha = 0.7f), // Semi-transparan
+            color = CalcColors.TextWhite.copy(alpha = 0.7f),
             textAlign = TextAlign.End,
             maxLines = 1
         )
         Spacer(modifier = Modifier.height(8.dp))
-        // Teks display/hasil (besar di bawah)
         Text(
             text = display,
             style = MaterialTheme.typography.displayLarge,
-            fontSize = 72.sp, // Ukuran font besar
+            fontSize = 72.sp,
             fontWeight = FontWeight.Bold,
-            color = textWhite,
+            color = CalcColors.TextWhite,
             textAlign = TextAlign.End,
             maxLines = 1
         )
     }
 }
 
+/**
+ * Lays out all the calculator buttons in a grid.
+ */
 @Composable
 private fun ButtonSection(
     onAction: (CalculatorAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val buttonRows = listOf(
+        // Row 1
+        listOf(
+            ButtonData("AC", CalculatorAction.Clear, CalcColors.ButtonLightGray),
+            ButtonData("+/-", CalculatorAction.ToggleSign, CalcColors.ButtonLightGray),
+            ButtonData("%", CalculatorAction.Percent, CalcColors.ButtonLightGray),
+            ButtonData("÷", CalculatorAction.Operation(CalculatorOperation.Divide), CalcColors.ButtonLightGray),
+        ),
+        // Row 2
+        listOf(
+            ButtonData("7", CalculatorAction.Number(7)),
+            ButtonData("8", CalculatorAction.Number(8)),
+            ButtonData("9", CalculatorAction.Number(9)),
+            ButtonData("x", CalculatorAction.Operation(CalculatorOperation.Multiply), CalcColors.ButtonLightGray),
+        ),
+        // Row 3
+        listOf(
+            ButtonData("4", CalculatorAction.Number(4)),
+            ButtonData("5", CalculatorAction.Number(5)),
+            ButtonData("6", CalculatorAction.Number(6)),
+            ButtonData("-", CalculatorAction.Operation(CalculatorOperation.Subtract), CalcColors.ButtonLightGray),
+        ),
+        // Row 4
+        listOf(
+            ButtonData("1", CalculatorAction.Number(1)),
+            ButtonData("2", CalculatorAction.Number(2)),
+            ButtonData("3", CalculatorAction.Number(3)),
+            ButtonData("+", CalculatorAction.Operation(CalculatorOperation.Add), CalcColors.ButtonLightGray),
+        ),
+        // Row 5
+        listOf(
+            ButtonData("0", CalculatorAction.Number(0), weight = 2f, alignment = Alignment.CenterStart),
+            ButtonData(".", CalculatorAction.Decimal),
+            ButtonData("=", CalculatorAction.Calculate, CalcColors.DarkBlueBg, CalcColors.TextWhite),
+        )
+    )
+
     Column(
         modifier = modifier.padding(16.dp).padding(bottom = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp) // Jarak antar baris
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        val buttonHeight = 80.dp // Tinggi tombol yang seragam
-        val buttonArrangement = Arrangement.spacedBy(12.dp) // Jarak antar tombol
-
-        // Baris 1: AC, +/-, %, ÷
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = buttonArrangement
-        ) {
-            CalculatorButton(
-                symbol = "AC",
-                backgroundColor = buttonLightGray,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Clear) }
-            )
-            CalculatorButton(
-                symbol = "+/-",
-                backgroundColor = buttonLightGray,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.ToggleSign) }
-            )
-            CalculatorButton(
-                symbol = "%",
-                backgroundColor = buttonLightGray,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Percent) }
-            )
-            CalculatorButton(
-                symbol = "÷",
-                backgroundColor = buttonLightGray,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Operation(CalculatorOperation.Divide)) }
-            )
+        buttonRows.forEach { rowData ->
+            ButtonRow(rowData = rowData, onAction = onAction)
         }
+    }
+}
 
-        // Baris 2: 7, 8, 9, x
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = buttonArrangement
-        ) {
+/**
+ * Creates a single row of calculator buttons.
+ */
+@Composable
+private fun ButtonRow(
+    rowData: List<ButtonData>,
+    onAction: (CalculatorAction) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        rowData.forEach { button ->
             CalculatorButton(
-                symbol = "7",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(7)) }
-            )
-            CalculatorButton(
-                symbol = "8",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(8)) }
-            )
-            CalculatorButton(
-                symbol = "9",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(9)) }
-            )
-            CalculatorButton(
-                symbol = "x",
-                backgroundColor = buttonLightGray,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Operation(CalculatorOperation.Multiply)) }
-            )
-        }
-
-        // Baris 3: 4, 5, 6, -
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = buttonArrangement
-        ) {
-            CalculatorButton(
-                symbol = "4",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(4)) }
-            )
-            CalculatorButton(
-                symbol = "5",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(5)) }
-            )
-            CalculatorButton(
-                symbol = "6",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(6)) }
-            )
-            CalculatorButton(
-                symbol = "-",
-                backgroundColor = buttonLightGray,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Operation(CalculatorOperation.Subtract)) }
-            )
-        }
-
-        // Baris 4: 1, 2, 3, +
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = buttonArrangement
-        ) {
-            CalculatorButton(
-                symbol = "1",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(1)) }
-            )
-            CalculatorButton(
-                symbol = "2",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(2)) }
-            )
-            CalculatorButton(
-                symbol = "3",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Number(3)) }
-            )
-            CalculatorButton(
-                symbol = "+",
-                backgroundColor = buttonLightGray,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Operation(CalculatorOperation.Add)) }
-            )
-        }
-
-        // Baris 5: 0, ., =
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = buttonArrangement
-        ) {
-            CalculatorButton(
-                symbol = "0",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(2f), // Tombol 0 lebih lebar
-                alignment = Alignment.CenterStart, // Teks 0 rata kiri
-                onClick = { onAction(CalculatorAction.Number(0)) }
-            )
-            CalculatorButton(
-                symbol = ".",
-                backgroundColor = buttonWhite,
-                textColor = textDark,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Decimal) }
-            )
-            CalculatorButton(
-                symbol = "=",
-                backgroundColor = darkBlueBg, // Warna biru
-                textColor = textWhite,
-                modifier = Modifier.weight(1f),
-                onClick = { onAction(CalculatorAction.Calculate) }
+                symbol = button.symbol,
+                backgroundColor = button.backgroundColor,
+                textColor = button.textColor,
+                modifier = Modifier.weight(button.weight),
+                alignment = button.alignment,
+                onClick = { onAction(button.action) }
             )
         }
     }
 }
 
+/**
+ * The base Composable for a single calculator button.
+ */
 @Composable
 fun CalculatorButton(
     symbol: String,
@@ -286,12 +211,11 @@ fun CalculatorButton(
     Box(
         contentAlignment = alignment,
         modifier = Modifier
-            .clip(RoundedCornerShape(24.dp)) // Bentuk "pil"
+            .clip(RoundedCornerShape(24.dp))
             .background(backgroundColor)
-            .clickable { onClick() }
+            .clickable(onClick = onClick)
             .then(modifier)
-            .height(80.dp) // Tinggi tombol seragam
-            // Padding horizontal khusus untuk tombol '0'
+            .height(80.dp)
             .padding(horizontal = if (alignment == Alignment.CenterStart) 30.dp else 0.dp)
     ) {
         Text(
@@ -303,7 +227,7 @@ fun CalculatorButton(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CalculatorScreenPreview() {
     ProyekUTSTheme {

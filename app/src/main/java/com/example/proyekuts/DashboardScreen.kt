@@ -30,8 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyekuts.ui.navigation.NavItem
 import com.example.proyekuts.ui.screens.biodata.BiodataScreen
 import com.example.proyekuts.ui.screens.calculator.CalculatorScreen
-import com.example.proyekuts.ui.screens.ContactScreen
-import com.example.proyekuts.ui.screens.NewsScreen
+import com.example.proyekuts.ui.screens.ContactNavigation
+import com.example.proyekuts.ui.screens.NewsNavigation
 import com.example.proyekuts.ui.screens.weather.WeatherScreen
 
 @Composable
@@ -137,9 +137,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         modifier = modifier
     ) {
         composable(NavItem.Biodata.route) { BiodataScreen() }
-        composable(NavItem.Contact.route) { ContactScreen() }
+        composable(NavItem.Contact.route) { ContactNavigation() }
         composable(NavItem.Calculator.route) { CalculatorScreen() }
         composable(NavItem.Weather.route) { WeatherScreen() }
-        composable(NavItem.News.route) { NewsScreen() }
+        composable(NavItem.News.route) { NewsNavigation() }
     }
 }
