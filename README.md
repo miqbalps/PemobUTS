@@ -1,4 +1,4 @@
-# Proyek UTS Android — Jetpack Compose (Material 3)
+# Proyek UTS Pemrograman Mobile — Jetpack Compose (Material 3)
 
 Aplikasi Android berbasis Kotlin dan Jetpack Compose (Material 3) yang menampilkan lima fitur utama: Biodata, Kontak, Kalkulator, Cuaca, dan Berita. Navigasi utama menggunakan Bottom Navigation. Tiap menu diimplementasikan dengan konsep Fragment yang memuat UI Compose (ComposeView/FragmentContainer).
 
