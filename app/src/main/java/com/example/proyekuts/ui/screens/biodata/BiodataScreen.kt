@@ -184,10 +184,15 @@ private fun BiodataViewContent(state: BiodataUiState, onEditClick: () -> Unit) {
 private fun BiodataEditContent(stateHolder: BiodataState, onDatePickerClick: () -> Unit) {
     val state = stateHolder.uiState
     val customTextFieldColors = TextFieldDefaults.colors(
-        focusedTextColor = Color.Black, unfocusedTextColor = Color.Black,
-        focusedContainerColor = Color.Transparent, unfocusedContainerColor = Color.Transparent,
-        focusedIndicatorColor = darkBlueBase, unfocusedIndicatorColor = Color.Gray,
-        cursorColor = Color.Black
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        focusedIndicatorColor = darkBlueBase,
+        unfocusedIndicatorColor = Color.Gray,
+        cursorColor = Color.Black,
+        focusedLabelColor = darkBlueBase,
+        unfocusedLabelColor = Color.Gray
     )
 
     Column(
@@ -239,9 +244,16 @@ private fun BiodataEditContent(stateHolder: BiodataState, onDatePickerClick: () 
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = state.pekerjaanDropdownExpanded) },
                 modifier = Modifier.menuAnchor().fillMaxWidth()
             )
-            ExposedDropdownMenu(expanded = state.pekerjaanDropdownExpanded, onDismissRequest = stateHolder::onPekerjaanDropdownDismiss) {
+            ExposedDropdownMenu(
+                expanded = state.pekerjaanDropdownExpanded,
+                onDismissRequest = stateHolder::onPekerjaanDropdownDismiss,
+                modifier = Modifier.background(Color.White),
+            ) {
                 stateHolder.pekerjaanOptions.forEach { option ->
-                    DropdownMenuItem(text = { Text(option) }, onClick = { stateHolder.onPekerjaanSelect(option) })
+                    DropdownMenuItem(
+                        text = { Text(option, color = Color.Black) },
+                        onClick = { stateHolder.onPekerjaanSelect(option) }
+                    )
                 }
             }
         }
@@ -256,6 +268,7 @@ private fun BiodataEditContent(stateHolder: BiodataState, onDatePickerClick: () 
         }
     }
 }
+
 
 @Composable
 private fun ProfileInfoItem(icon: ImageVector, label: String, value: String, isLastItem: Boolean = false) {
