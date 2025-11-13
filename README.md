@@ -58,28 +58,25 @@ Aplikasi ini disusun sesuai ketentuan UTS:
 
 ## Screenshots
 
-Sertakan file gambar di folder: public/screenshots/. Ganti nama file sesuai milik Anda bila berbeda.
+Screenshot lengkap ada di folder public/screenshots
 
 - Splash Screen  
-  ![Splash](public/screenshots/01-splash.png)
-
-- Dashboard (Bottom Navigation)  
-  ![Dashboard](public/screenshots/02-dashboard.png)
+  ![Splash](public/screenshots/splash_screen.jpg)
 
 - Biodata  
-  ![Biodata](public/screenshots/03-biodata.png)
+  ![Biodata](public/screenshots/view_mode.jpg)
 
 - Kontak  
-  ![Kontak](public/screenshots/04-kontak.png)
+  ![Kontak](public/screenshots/contact_list.jpg)
 
 - Kalkulator  
-  ![Kalkulator](public/screenshots/05-kalkulator.png)
+  ![Kalkulator](public/screenshots/calculator.jpg)
 
 - Cuaca  
-  ![Cuaca](public/screenshots/06-cuaca.png)
+  ![Cuaca](public/screenshots/weather.jpg)
 
 - Berita  
-  ![Berita](public/screenshots/07-berita.png)
+  ![Berita](public/screenshots/news_list.jpg)
 
 Catatan:
 
